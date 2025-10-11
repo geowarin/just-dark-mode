@@ -1,74 +1,76 @@
+type Measurement = {
+  element: Element;
+  ratio: number;
+  area: number;
+  rgba: [number, number, number, number];
+};
+
 export default defineContentScript({
   matches: ["<all_urls>"],
-  main() {
-    // Find element with largest visible area
-    function getLargestElement() {
-      const candidates = [
-        document.body,
-        document.querySelector("main"),
-        document.querySelector('[role="main"]'),
-        document.getElementById("main"),
-        document.getElementById("content"),
-        document.querySelector("article"),
-        document.querySelector("section"),
-        [...document.querySelectorAll("body > *")],
-      ]
-        .flat()
-        .filter(Boolean) as HTMLElement[];
+  async main() {
+    async function findMostSignificantElement(): Promise<Measurement | undefined> {
+      const elements = Array.from(document.querySelectorAll("body *")).concat(document.body);
+      const measurements: Array<Measurement> = [];
 
-      // Calculate visible area for each candidate
-      const candidatesWithArea = candidates.map(el => {
-        const rect = el.getBoundingClientRect();
-        const totalArea = rect.width * rect.height;
+      const observerPromises = elements.map(element => {
+        return new Promise<void>(resolve => {
+          const observer = new IntersectionObserver(
+            entries => {
+              for (const entry of entries) {
+                const rect = entry.boundingClientRect;
+                const area = rect.width * rect.height;
+                const visibleArea = area * entry.intersectionRatio;
 
-        // Check if background is transparent
-        const bgColor = window.getComputedStyle(el).backgroundColor;
-        const rgba = bgColor.match(/[\d.]+/g);
-        const isTransparent = rgba && rgba.length === 4 && parseFloat(rgba[3]) === 0;
-        console.log({ el, bgColor, isTransparent });
+                const backgroundColor = window.getComputedStyle(entry.target).backgroundColor;
+                const opacity = window.getComputedStyle(entry.target).opacity;
 
-        // Skip transparent elements
-        if (isTransparent) {
-          console.log({ el, bgColor, status: "transparent - skipped" });
-          return { el, visibleArea: 0 };
-        }
+                const rgb = backgroundColor.match(/\d+/g) ?? [0, 0, 0, 0];
+                const rgba = rgb.map(Number) as [number, number, number, number];
 
-        // Check if this element is significantly covered by another candidate
-        let coveredArea = 0;
-        candidates.forEach(other => {
-          if (other === el || !el.contains(other)) return;
+                const alphaIsZero = rgba[3] === 0;
+                const isTransparent = alphaIsZero || opacity === "0";
 
-          const otherRect = other.getBoundingClientRect();
-          const otherArea = otherRect.width * otherRect.height;
-          coveredArea += otherArea;
+                if (isTransparent || visibleArea === 0) {
+                  continue;
+                }
+
+                const measure: Measurement = {
+                  element: entry.target,
+                  ratio: entry.intersectionRatio,
+                  area: visibleArea,
+                  rgba,
+                };
+                console.log(measure);
+                measurements.push(measure);
+              }
+              observer.disconnect();
+              resolve();
+            },
+            { threshold: [0, 0.25, 0.5, 0.75, 1.0] },
+          );
+
+          observer.observe(element);
         });
-
-        const visibleArea = Math.max(0, totalArea - coveredArea);
-        console.log({ el, totalArea, coveredArea, visibleArea });
-
-        return { el, visibleArea };
       });
 
-      // Return the element with the largest visible area
-      const result = candidatesWithArea.reduce((max, curr) => (curr.visibleArea > max.visibleArea ? curr : max));
+      await Promise.all(observerPromises);
 
-      return result.el;
+      // Sort by visible area
+      measurements.sort((a, b) => b.area - a.area);
+
+      return measurements[0];
     }
 
-    const targetElement = getLargestElement();
-    const bgColor = window.getComputedStyle(targetElement).backgroundColor;
+    const measure = await findMostSignificantElement();
+    if (measure === undefined) {
+      return;
+    }
 
-    console.log("bg color", targetElement, bgColor);
-
-    // Parse RGB color
-    const rgb = bgColor.match(/\d+/g);
-    if (!rgb) return;
-
-    const [r, g, b] = rgb.map(Number);
+    const [r, g, b] = measure.rgba.map(Number);
 
     // Calculate relative luminance (perceived brightness)
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-    console.log("luminance", luminance);
+    console.log("luminance", measure, luminance);
 
     // If light background (luminance > 0.5), apply dark mode
     if (luminance > 0.5) {
