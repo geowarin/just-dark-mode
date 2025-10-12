@@ -14,13 +14,13 @@ export default defineContentScript({
 
     const sitePreference = await storage.getItem<SitePreference>(`local:${storageKey}`);
 
-    const { isDark, confidence } = isDarkMode();
-    console.log(`Dark mode: ${isDark} (confidence: ${(confidence * 100).toFixed(0)}%)`);
+    const { darkModeDetected, confidence } = isDarkMode();
+    console.log(`Dark mode: ${darkModeDetected} (confidence: ${(confidence * 100).toFixed(0)}%)`);
 
     const mode = sitePreference?.mode ?? "detect";
 
     if (mode === "detect") {
-      if (!isDark) {
+      if (!darkModeDetected) {
         applyDarkMode();
       }
     } else {
@@ -34,7 +34,7 @@ export default defineContentScript({
     onMessage("request-state", () => {
       console.log("Requesting state");
       return {
-        isDark,
+        darkModeDetected,
         confidence,
         sitePreference: { mode },
         hostname,
@@ -42,12 +42,20 @@ export default defineContentScript({
     });
 
     onMessage("toggle-dark-mode", async message => {
-      if (message.data.hostname === hostname) {
-        if (message.data.enabled) {
-          removeDarkMode();
+      const { hostname: messageHostname, mode } = message.data;
+      if (messageHostname === hostname) {
+        if (mode === "detect") {
+          if (!darkModeDetected) {
+            applyDarkMode();
+          }
         } else {
-          applyDarkMode();
+          if (mode === "light") {
+            removeDarkMode();
+          } else {
+            applyDarkMode();
+          }
         }
+        await storage.setItem<SitePreference>(`local:${storageKey}`, { mode });
       }
     });
   },

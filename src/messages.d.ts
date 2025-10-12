@@ -1,7 +1,8 @@
 import { ProtocolWithReturn } from "webext-bridge";
+import { DarkMode } from "@/lib/preferences";
 
 export interface RequestStateResponse {
-  isDark: boolean;
+  darkModeDetected: boolean;
   confidence: number;
   sitePreference: SitePreference;
   hostname: string;
@@ -9,7 +10,7 @@ export interface RequestStateResponse {
 
 declare module "webext-bridge" {
   export interface ProtocolMap {
-    "toggle-dark-mode": { hostname: string; enabled: boolean };
+    "toggle-dark-mode": { hostname: string; mode: DarkMode };
     "request-state": ProtocolWithReturn<void, RequestStateResponse>;
   }
 }

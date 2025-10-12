@@ -1,3 +1,5 @@
+export type DarkMode = "dark" | "light" | "detect";
+
 export interface SitePreference {
-  mode: "dark" | "light" | "detect";
+  mode: DarkMode;
 }

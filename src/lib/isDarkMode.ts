@@ -1,4 +1,4 @@
-export function isDarkMode(): { isDark: boolean; confidence: number } {
+export function isDarkMode(): { darkModeDetected: boolean; confidence: number } {
   let darkScore = 0;
   let checks = 0;
 
@@ -50,7 +50,7 @@ export function isDarkMode(): { isDark: boolean; confidence: number } {
 
   const confidence = darkScore / checks;
   return {
-    isDark: confidence > 0.5,
+    darkModeDetected: confidence > 0.5,
     confidence,
   };
 }
