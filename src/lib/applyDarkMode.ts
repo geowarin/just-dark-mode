@@ -78,6 +78,13 @@ export function applyDarkMode() {
       background-color: #1e1e1e !important;
       color: #e0e0e0 !important;
     }
+
+    /* Pseudo-elements */
+    *::before, *::after {
+      color: inherit !important;
+      border-color: #444 !important;
+      background-color: inherit !important;
+    }
   }
 `;
   const style = document.createElement("style");
