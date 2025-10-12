@@ -13,6 +13,24 @@ export function applyDarkMode() {
       color: #e0e0e0 !important;
       border-color: #444 !important;
     }
+
+    /* Preserve transparent backgrounds */
+    [style*="background: transparent"],
+    [style*="background-color: transparent"],
+    [class*="transparent"],
+    [class*="overlay"],
+    [class*="overContent"] {
+      background-color: transparent !important;
+    }
+
+    /* Preserve elements with opacity or backdrop effects */
+    [style*="opacity"],
+    [style*="backdrop"],
+    [class*="backdrop"],
+    [class*="modal"],
+    [class*="overlay"] {
+      background-color: transparent !important;
+    }
     
     /* Specific elements */
     html, body, div, main, section, article, header, footer, nav, aside {
