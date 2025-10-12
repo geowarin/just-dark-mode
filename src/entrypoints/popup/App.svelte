@@ -1,42 +1,95 @@
 <script lang="ts">
-  import svelteLogo from '../../assets/svelte.svg'
-  import Counter from '../../lib/Counter.svelte'
+  import { onMount } from "svelte";
+  import { storage } from "#imports";
+  import { isRequestStateResponse } from "@/lib/messages";
+
+  let isDarkModeEnabled = false;
+  let confidence = 0;
+  let hostname = "";
+  let hasUserPreference = false;
+
+  onMount(async () => {
+    // Request current state from active tab
+    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+    if (!tab.id) return;
+
+    // Request state from content script
+    try {
+      const response = await browser.tabs.sendMessage(tab.id, { type: "request-state" });
+      if (isRequestStateResponse(response)) {
+        hostname = response.hostname;
+        confidence = response.confidence;
+
+        isDarkModeEnabled = response.sitePreference.mode !== "light";
+      }
+    } catch (error) {
+      console.error("Failed to get dark mode state:", error);
+    }
+  });
+
+  async function handleToggle() {
+    const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+    if (!tab.id || !hostname) return;
+
+    isDarkModeEnabled = !isDarkModeEnabled;
+    hasUserPreference = true;
+
+    // Store user preference
+    const storageKey = `dark-mode-preference:${hostname}`;
+    await storage.setItem(`local:${storageKey}`, isDarkModeEnabled);
+
+    // Send message to content script to apply changes
+    await browser.tabs.sendMessage(tab.id, {
+      type: "toggle-dark-mode",
+      enabled: isDarkModeEnabled,
+      hostname,
+    });
+  }
 </script>
 
 <main>
-  <div>
-    <a href="https://wxt.dev" target="_blank" rel="noreferrer">
-      <img src="/wxt.svg" class="logo" alt="WXT Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
-  </div>
-  <h1>WXT + Svelte</h1>
+  <h1>Just Dark Mode</h1>
 
   <div class="card">
-    <Counter />
-  </div>
+    <label>
+      <input type="checkbox" checked={isDarkModeEnabled} on:change={handleToggle} />
+      <span>Dark Mode</span>
+    </label>
 
-  <p class="read-the-docs">
-    Click on the WXT and Svelte logos to learn more
-  </p>
+    {#if hostname}
+      <div class="info">
+        <div class="hostname">{hostname}</div>
+        <div class="confidence">
+          Detection confidence: {(confidence * 100).toFixed(0)}%
+          {#if hasUserPreference}
+            <span class="override">(overridden)</span>
+          {/if}
+        </div>
+      </div>
+    {/if}
+  </div>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25em;
+    font-size: 0.875em;
+    opacity: 0.7;
+    margin-top: 0.5em;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #54bc4ae0);
+
+  .hostname {
+    font-weight: 500;
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+
+  .confidence {
+    font-size: 0.8em;
   }
-  .read-the-docs {
-    color: #888;
+
+  .override {
+    color: #ff6b35;
+    font-weight: 500;
   }
 </style>

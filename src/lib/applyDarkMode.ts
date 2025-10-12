@@ -89,6 +89,7 @@ export function applyDarkMode() {
     code[class*="language-"], pre[class*="language-"],
     .hljs, [class*="highlight"] {
       filter: none !important;
+      background-color: #2d2d2d !important;
     }
     
     /* Shadow DOM handling - some sites use it */
