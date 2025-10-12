@@ -2,7 +2,7 @@ import { isDarkMode } from "@/lib/isDarkMode";
 import { applyDarkMode, removeDarkMode } from "@/lib/applyDarkMode";
 import { storage } from "#imports";
 import { SitePreference } from "@/lib/preferences";
-import { RequestStateResponse } from "@/lib/messages";
+import { onMessage } from "webext-bridge/content-script";
 
 export default defineContentScript({
   matches: ["<all_urls>"],
@@ -31,29 +31,24 @@ export default defineContentScript({
       }
     }
 
-    // Listen for messages from popup
-    browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      switch (message.type) {
-        case "request-state": // Send state back to popup when it requests it
-          sendResponse({
-            type: "dark-mode-state",
-            isDark,
-            confidence,
-            sitePreference: { mode },
-            hostname,
-          } as RequestStateResponse);
-          break;
-        case "toggle-dark-mode":
-          if (message.hostname === hostname) {
-            if (message.enabled) {
-              removeDarkMode();
-            } else {
-              applyDarkMode();
-            }
-          }
-          break;
+    onMessage("request-state", () => {
+      console.log("Requesting state");
+      return {
+        isDark,
+        confidence,
+        sitePreference: { mode },
+        hostname,
+      };
+    });
+
+    onMessage("toggle-dark-mode", async message => {
+      if (message.data.hostname === hostname) {
+        if (message.data.enabled) {
+          removeDarkMode();
+        } else {
+          applyDarkMode();
+        }
       }
-      return true; // Keep the message channel open for async response
     });
   },
 });

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { storage } from "#imports";
-  import { isRequestStateResponse } from "@/lib/messages";
+  import { sendMessage } from "webext-bridge/popup";
 
   let isDarkModeEnabled = false;
   let confidence = 0;
@@ -9,28 +9,17 @@
   let hasUserPreference = false;
 
   onMount(async () => {
-    // Request current state from active tab
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-    if (!tab.id) return;
 
-    // Request state from content script
-    try {
-      const response = await browser.tabs.sendMessage(tab.id, { type: "request-state" });
-      if (isRequestStateResponse(response)) {
-        hostname = response.hostname;
-        confidence = response.confidence;
-
-        isDarkModeEnabled = response.sitePreference.mode !== "light";
-      }
-    } catch (error) {
-      console.error("Failed to get dark mode state:", error);
-    }
+    const response = await sendMessage("request-state", undefined, "content-script@" + tab.id);
+    hostname = response.hostname;
+    confidence = response.confidence;
+    isDarkModeEnabled = response.sitePreference.mode !== "light";
+    hasUserPreference = response.sitePreference.mode !== "detect";
   });
 
   async function handleToggle() {
     const [tab] = await browser.tabs.query({ active: true, currentWindow: true });
-    if (!tab.id || !hostname) return;
-
     isDarkModeEnabled = !isDarkModeEnabled;
     hasUserPreference = true;
 
@@ -38,12 +27,11 @@
     const storageKey = `dark-mode-preference:${hostname}`;
     await storage.setItem(`local:${storageKey}`, isDarkModeEnabled);
 
-    // Send message to content script to apply changes
-    await browser.tabs.sendMessage(tab.id, {
-      type: "toggle-dark-mode",
+    const data = {
       enabled: isDarkModeEnabled,
       hostname,
-    });
+    };
+    await sendMessage("toggle-dark-mode", data, "content-script@" + tab.id);
   }
 </script>
 

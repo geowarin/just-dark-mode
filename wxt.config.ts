@@ -7,4 +7,8 @@ export default defineConfig({
   manifest: {
     permissions: ["storage"],
   },
+  webExt: {
+    startUrls: ["http://www.example.com/"],
+    openDevtools: true,
+  },
 });
