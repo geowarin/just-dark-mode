@@ -1,13 +1,13 @@
 @layer dark-mode-override {
     /* Base - set dark color scheme hint for browser native elements */
     html {
-        background-color: #1e1e1e !important;
+        background-color: var(--background-primary) !important;
         color-scheme: dark;
     }
 
     body {
-        background-color: #1e1e1e !important;
-        color: #e0e0e0 !important;
+        background-color: var(--background-primary) !important;
+        color: var(--text-color) !important;
     }
 
     /* Structural elements - explicit list instead of * selector */
@@ -15,10 +15,16 @@
     p, span, h1, h2, h3, h4, h5, h6,
     li, ul, ol, dl, dt, dd,
     table, thead, tbody, tfoot, th, td, tr, blockquote {
-        background-color: #1e1e1e !important;
-        color: #e0e0e0 !important;
+        background-color: var(--background-primary) !important;
+        color: var(--text-color) !important;
         border-color: #444 !important;
     }
+
+    /* custom selector */
+    :--heading {
+        background: hotpink !important;
+    }
+
 
     /* Preserve transparency - consolidated and extended */
     [style*="transparent"],
@@ -49,7 +55,7 @@
     [class*="thumbnail"]:not(img):not(svg),
     [class*="avatar"]:not(img):not(svg),
     [class*="icon"]:not(img):not(svg):not(i) {
-        background-color: #2d2d2d !important;
+        background-color: var(--background-secondary) !important;
     }
     
     /* Dialogs and modals - distinct background */
@@ -61,9 +67,9 @@
     [class*="tooltip"],
     [class*="dropdown-menu"],
     [class*="dropdown-content"] {
-        background-color: #2d2d2d !important;
+        background-color: var(--background-secondary) !important;
         border-color: #555 !important;
-        color: #e0e0e0 !important;
+        color: var(--text-color) !important;
     }
 
     /* Only inherit colors for structural elements */
