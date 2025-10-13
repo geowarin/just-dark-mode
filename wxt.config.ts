@@ -8,7 +8,8 @@ export default defineConfig({
     permissions: ["storage"],
   },
   webExt: {
-    startUrls: ["http://www.example.com/"],
+    startUrls: ["http://www.example.com/", "https://www.npmjs.com/package/webext-bridge"],
     openDevtools: true,
+    chromiumArgs: ["--user-data-dir=./.wxt/chrome-data"],
   },
 });

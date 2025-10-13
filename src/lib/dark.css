@@ -1,0 +1,252 @@
+@layer dark-mode-override {
+    /* Base - set dark color scheme hint for browser native elements */
+    html {
+        background-color: #1e1e1e !important;
+        color-scheme: dark;
+    }
+
+    body {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Structural elements - explicit list instead of * selector */
+    div, main, section, article, header, footer, nav, aside,
+    p, span, h1, h2, h3, h4, h5, h6,
+    li, ul, ol, dl, dt, dd,
+    table, thead, tbody, tfoot, th, td, tr {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+        border-color: #444 !important;
+    }
+
+    /* Preserve transparency - consolidated and extended */
+    [style*="transparent"],
+    [style*="opacity: 0"],
+    [class*="transparent"],
+    [class*="overlay"],
+    [class*="modal"],
+    [class*="backdrop"],
+    [class*="dialog"],
+    [aria-hidden="true"] {
+        background-color: transparent !important;
+    }
+
+    /* Don't override media elements at all */
+    img, picture, video, canvas, svg, iframe, object, embed,
+    img *, svg * {
+        filter: none !important;
+        background-color: transparent !important;
+        color: initial !important;
+        border-color: initial !important;
+    }
+
+    /* Image containers - use :not() to avoid media elements */
+    [class*="image"]:not(img):not(svg),
+    [class*="img"]:not(img):not(svg),
+    [class*="photo"]:not(img):not(svg),
+    [class*="picture"]:not(img):not(svg),
+    [class*="thumbnail"]:not(img):not(svg),
+    [class*="avatar"]:not(img):not(svg),
+    [class*="icon"]:not(img):not(svg):not(i) {
+        background-color: #2d2d2d !important;
+    }
+
+    /* Links with all interactive states */
+    a {
+        color: #5eb3ff !important;
+    }
+    a:visited {
+        color: #c299ff !important;
+    }
+    a:hover {
+        color: #8ccfff !important;
+    }
+    a:active {
+        color: #3d8fcc !important;
+    }
+    a:focus-visible {
+        outline-color: #5eb3ff !important;
+    }
+
+    /* Form elements - base styles */
+    input, textarea, select, datalist, output {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+        border-color: #444 !important;
+    }
+
+    /* Form element states */
+    input:focus, textarea:focus, select:focus {
+        outline-color: #5eb3ff !important;
+        border-color: #5eb3ff !important;
+    }
+
+    input:disabled, textarea:disabled, select:disabled, button:disabled {
+        opacity: 0.5 !important;
+    }
+
+    input::placeholder, textarea::placeholder {
+        color: #888 !important;
+        opacity: 1 !important;
+    }
+
+    /* Specific input types */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"] {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Buttons - more visible than inputs */
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"] {
+        background-color: #3d3d3d !important;
+        color: #e0e0e0 !important;
+        border-color: #555 !important;
+    }
+
+    button:hover,
+    input[type="button"]:hover,
+    input[type="submit"]:hover,
+    input[type="reset"]:hover,
+    [role="button"]:hover {
+        background-color: #4d4d4d !important;
+    }
+
+    button:focus-visible,
+    input[type="button"]:focus-visible,
+    input[type="submit"]:focus-visible,
+    [role="button"]:focus-visible {
+        outline-color: #5eb3ff !important;
+    }
+
+    /* Checkboxes and radios */
+    input[type="checkbox"],
+    input[type="radio"] {
+        background-color: #2d2d2d !important;
+        border-color: #555 !important;
+        accent-color: #5eb3ff !important;
+    }
+
+    /* Progress and meter */
+    progress, meter {
+        background-color: #2d2d2d !important;
+        border-color: #444 !important;
+    }
+
+    /* Code blocks - preserve syntax highlighting */
+    code, pre {
+        background-color: #2d2d2d !important;
+    }
+
+    /* Don't override colors inside code blocks with syntax highlighting */
+    code[class*="language-"] *,
+    pre[class*="language-"] *,
+    .hljs *,
+    [class*="highlight"] *,
+    [class*="syntax"] *,
+    [class*="token"] *,
+    [class*="prism"] * {
+        background-color: transparent !important;
+        color: inherit !important;
+    }
+
+    /* Common framework light backgrounds - expanded list */
+    .bg-white, .bg-light, .bg-gray-50, .bg-gray-100, .bg-gray-200,
+    [class*="bg-white"], [class*="bg-light"],
+    [class*="bg-gray-1"], [class*="bg-gray-2"],
+    [class*="bg-50"], [class*="bg-100"], [class*="bg-200"] {
+        background-color: #1e1e1e !important;
+    }
+
+    /* Common framework dark text - expanded list */
+    .text-dark, .text-black, .text-gray-800, .text-gray-900,
+    [class*="text-dark"], [class*="text-black"],
+    [class*="text-gray-8"], [class*="text-gray-9"],
+    [class*="text-900"] {
+        color: #e0e0e0 !important;
+    }
+
+    /* Handle inline styles - only target specific light colors */
+    [style*="background-color: rgb(255, 255, 255)"],
+    [style*="background-color: rgba(255, 255, 255"],
+    [style*="background-color: #fff"],
+    [style*="background-color:#fff"],
+    [style*="background-color: white"],
+    [style*="background: rgb(255, 255, 255)"],
+    [style*="background: #fff"],
+    [style*="background:#fff"],
+    [style*="background: white"] {
+        background-color: #1e1e1e !important;
+    }
+
+    /* Dialogs and modals - distinct background */
+    [role="dialog"],
+    [role="alertdialog"],
+    [aria-modal="true"],
+    dialog,
+    [class*="popover"],
+    [class*="tooltip"],
+    [class*="dropdown-menu"],
+    [class*="dropdown-content"] {
+        background-color: #2d2d2d !important;
+        border-color: #555 !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Pseudo-elements - conservative approach */
+    *::before, *::after {
+        border-color: #444 !important;
+    }
+
+    /* Only inherit colors for structural elements */
+    div::before, div::after,
+    span::before, span::after,
+    p::before, p::after,
+    section::before, section::after,
+    article::before, article::after,
+    li::before, li::after {
+        color: inherit !important;
+    }
+
+    /* Scrollbars (webkit) */
+    ::-webkit-scrollbar {
+        background-color: #1e1e1e !important;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #444 !important;
+        border-radius: 4px !important;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #555 !important;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: #2d2d2d !important;
+    }
+
+    /* Selection */
+    ::selection {
+        background-color: #5eb3ff !important;
+        color: #000 !important;
+    }
+
+    ::-moz-selection {
+        background-color: #5eb3ff !important;
+        color: #000 !important;
+    }
+}
