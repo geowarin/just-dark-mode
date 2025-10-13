@@ -1,0 +1,78 @@
+@layer dark-mode-override {
+    /* Base - set dark color scheme hint for browser native elements */
+    html {
+        background-color: #1e1e1e !important;
+        color-scheme: dark;
+    }
+
+    body {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Structural elements - explicit list instead of * selector */
+    div, main, section, article, header, footer, nav, aside,
+    p, span, h1, h2, h3, h4, h5, h6,
+    li, ul, ol, dl, dt, dd,
+    table, thead, tbody, tfoot, th, td, tr, blockquote {
+        background-color: #1e1e1e !important;
+        color: #e0e0e0 !important;
+        border-color: #444 !important;
+    }
+
+    /* Preserve transparency - consolidated and extended */
+    [style*="transparent"],
+    [style*="opacity: 0"],
+    [class*="transparent"],
+    [class*="overlay"],
+    [class*="modal"],
+    [class*="backdrop"],
+    [class*="dialog"],
+    [aria-hidden="true"] {
+        background-color: transparent !important;
+    }
+
+    /* Don't override media elements at all */
+    img, picture, video, canvas, svg, iframe, object, embed,
+    img *, svg * {
+        filter: none !important;
+        background-color: transparent !important;
+        color: initial !important;
+        border-color: initial !important;
+    }
+
+    /* Image containers - use :not() to avoid media elements */
+    [class*="image"]:not(img):not(svg),
+    [class*="img"]:not(img):not(svg),
+    [class*="photo"]:not(img):not(svg),
+    [class*="picture"]:not(img):not(svg),
+    [class*="thumbnail"]:not(img):not(svg),
+    [class*="avatar"]:not(img):not(svg),
+    [class*="icon"]:not(img):not(svg):not(i) {
+        background-color: #2d2d2d !important;
+    }
+    
+    /* Dialogs and modals - distinct background */
+    [role="dialog"],
+    [role="alertdialog"],
+    [aria-modal="true"],
+    dialog,
+    [class*="popover"],
+    [class*="tooltip"],
+    [class*="dropdown-menu"],
+    [class*="dropdown-content"] {
+        background-color: #2d2d2d !important;
+        border-color: #555 !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Only inherit colors for structural elements */
+    div::before, div::after,
+    span::before, span::after,
+    p::before, p::after,
+    section::before, section::after,
+    article::before, article::after,
+    li::before, li::after {
+        color: inherit !important;
+    }
+}

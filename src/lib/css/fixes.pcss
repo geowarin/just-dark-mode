@@ -1,0 +1,29 @@
+
+/* Common framework light backgrounds - expanded list */
+.bg-white, .bg-light, .bg-gray-50, .bg-gray-100, .bg-gray-200,
+[class*="bg-white"], [class*="bg-light"],
+[class*="bg-gray-1"], [class*="bg-gray-2"],
+[class*="bg-50"], [class*="bg-100"], [class*="bg-200"] {
+    background-color: #1e1e1e !important;
+}
+
+/* Common framework dark text - expanded list */
+.text-dark, .text-black, .text-gray-800, .text-gray-900,
+[class*="text-dark"], [class*="text-black"],
+[class*="text-gray-8"], [class*="text-gray-9"],
+[class*="text-900"] {
+    color: #e0e0e0 !important;
+}
+
+/* Handle inline styles - only target specific light colors */
+[style*="background-color: rgb(255, 255, 255)"],
+[style*="background-color: rgba(255, 255, 255"],
+[style*="background-color: #fff"],
+[style*="background-color:#fff"],
+[style*="background-color: white"],
+[style*="background: rgb(255, 255, 255)"],
+[style*="background: #fff"],
+[style*="background:#fff"],
+[style*="background: white"] {
+    background-color: #1e1e1e !important;
+}

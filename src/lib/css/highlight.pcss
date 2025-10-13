@@ -1,0 +1,27 @@
+
+@layer dark-mode-override {
+
+    /* Code blocks - preserve syntax highlighting */
+    code, pre,
+    code[class*="language-"],
+    pre[class*="language-"],
+    .hljs,
+    [class*="highlight"],
+    [class*="syntax"],
+    [class*="token"],
+    [class*="prism"] {
+        background-color: #2d2d2d !important;
+    }
+
+    /* Don't override colors inside code blocks with syntax highlighting */
+    code[class*="language-"] *,
+    pre[class*="language-"] *,
+    .hljs *,
+    [class*="highlight"] *,
+    [class*="syntax"] *,
+    [class*="token"] *,
+    [class*="prism"] * {
+        background-color: transparent !important;
+        color: inherit !important;
+    }
+}

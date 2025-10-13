@@ -1,0 +1,96 @@
+@layer dark-mode-override {
+
+    /* Links with all interactive states */
+    a {
+        color: #5eb3ff !important;
+    }
+    a:visited {
+        color: #c299ff !important;
+    }
+    a:hover {
+        color: #8ccfff !important;
+    }
+    a:active {
+        color: #3d8fcc !important;
+    }
+    a:focus-visible {
+        outline-color: #5eb3ff !important;
+    }
+
+    /* Form elements - base styles */
+    input, textarea, select, datalist, output {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+        border-color: #444 !important;
+    }
+
+    /* Form element states */
+    input:focus, textarea:focus, select:focus {
+        outline-color: #5eb3ff !important;
+        border-color: #5eb3ff !important;
+    }
+
+    input:disabled, textarea:disabled, select:disabled, button:disabled {
+        opacity: 0.5 !important;
+    }
+
+    input::placeholder, textarea::placeholder {
+        color: #888 !important;
+        opacity: 1 !important;
+    }
+
+    /* Specific input types */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="search"],
+    input[type="tel"],
+    input[type="url"],
+    input[type="number"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"] {
+        background-color: #2d2d2d !important;
+        color: #e0e0e0 !important;
+    }
+
+    /* Buttons - more visible than inputs */
+    button,
+    input[type="button"],
+    input[type="submit"],
+    input[type="reset"],
+    [role="button"] {
+        background-color: #3d3d3d !important;
+        color: #e0e0e0 !important;
+        border-color: #555 !important;
+    }
+
+    button:hover,
+    input[type="button"]:hover,
+    input[type="submit"]:hover,
+    input[type="reset"]:hover,
+    [role="button"]:hover {
+        background-color: #4d4d4d !important;
+    }
+
+    button:focus-visible,
+    input[type="button"]:focus-visible,
+    input[type="submit"]:focus-visible,
+    [role="button"]:focus-visible {
+        outline-color: #5eb3ff !important;
+    }
+
+    /* Checkboxes and radios */
+    input[type="checkbox"],
+    input[type="radio"] {
+        background-color: #2d2d2d !important;
+        border-color: #555 !important;
+        accent-color: #5eb3ff !important;
+    }
+
+    /* Progress and meter */
+    progress, meter {
+        background-color: #2d2d2d !important;
+        border-color: #444 !important;
+    }
+}
