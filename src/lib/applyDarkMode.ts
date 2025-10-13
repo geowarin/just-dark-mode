@@ -1,4 +1,4 @@
-import darkMode from "./dark.css?inline";
+import darkMode from "./dark.pcss?inline";
 
 export function applyDarkMode() {
   // Check if already applied
