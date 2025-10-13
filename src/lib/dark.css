@@ -14,7 +14,7 @@
     div, main, section, article, header, footer, nav, aside,
     p, span, h1, h2, h3, h4, h5, h6,
     li, ul, ol, dl, dt, dd,
-    table, thead, tbody, tfoot, th, td, tr {
+    table, thead, tbody, tfoot, th, td, tr, blockquote {
         background-color: #1e1e1e !important;
         color: #e0e0e0 !important;
         border-color: #444 !important;
@@ -147,7 +147,14 @@
     }
 
     /* Code blocks - preserve syntax highlighting */
-    code, pre {
+    code, pre,
+    code[class*="language-"],
+    pre[class*="language-"],
+    .hljs,
+    [class*="highlight"],
+    [class*="syntax"],
+    [class*="token"],
+    [class*="prism"] {
         background-color: #2d2d2d !important;
     }
 
