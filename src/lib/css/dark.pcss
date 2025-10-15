@@ -1,4 +1,3 @@
-
 /*
 Unfortunately, hot reload is broken with css imports.
 @import "./variables.pcss";
@@ -8,20 +7,20 @@ Unfortunately, hot reload is broken with css imports.
 @import "./highlight.pcss";
 */
 
-@layer dark-mode-override {
+@layer just-dark-base {
     :root {
         --background-primary: #1e1e1e;
         --background-secondary: #2d2d2d;
         --text-color: #e0e0e0;
+        --border-color: #444;
     }
 
-    @custom-selector :--heading h1, h2, h3;
-    
-    /* custom selector */
-    :--heading {
-        background: hotpink !important;
-    }
-
+    /*   @custom-selector :--heading h1, h2, h3;
+   
+       !* custom selector *!
+       :--heading {
+           background: hotpink !important;
+       }*/
     /* Base - set dark color scheme hint for browser native elements */
     html {
         background-color: var(--background-primary) !important;
@@ -38,19 +37,16 @@ Unfortunately, hot reload is broken with css imports.
     p, span, h1, h2, h3, h4, h5, h6,
     li, ul, ol, dl, dt, dd,
     table, thead, tbody, tfoot, th, td, tr, blockquote {
-        background-color: var(--background-primary) !important;
-        color: var(--text-color) !important;
-        border-color: #444 !important;
+        &:not(.highlight) {
+            background-color: var(--background-primary) !important;
+            color: var(--text-color) !important;
+            border-color: var(--border-color) !important;
+        }
     }
 
     /* Preserve transparency - consolidated and extended */
     [style*="transparent"],
     [style*="opacity: 0"],
-    [class*="transparent"],
-    [class*="overlay"],
-    [class*="modal"],
-    [class*="backdrop"],
-    [class*="dialog"],
     [aria-hidden="true"] {
         background-color: transparent !important;
     }
@@ -58,38 +54,20 @@ Unfortunately, hot reload is broken with css imports.
     /* Don't override media elements at all */
     img, picture, video, canvas, svg, iframe, object, embed,
     img *, svg * {
-        filter: none !important;
         background-color: transparent !important;
         color: initial !important;
         border-color: initial !important;
-    }
-
-    /* Image containers - use :not() to avoid media elements */
-    [class*="image"]:not(img):not(svg),
-    [class*="img"]:not(img):not(svg),
-    [class*="photo"]:not(img):not(svg),
-    [class*="picture"]:not(img):not(svg),
-    [class*="thumbnail"]:not(img):not(svg),
-    [class*="avatar"]:not(img):not(svg),
-    [class*="icon"]:not(img):not(svg):not(i) {
-        background-color: var(--background-secondary) !important;
     }
 
     /* Dialogs and modals - distinct background */
     [role="dialog"],
     [role="alertdialog"],
     [aria-modal="true"],
-    dialog,
-    [class*="popover"],
-    [class*="tooltip"],
-    [class*="dropdown-menu"],
-    [class*="dropdown-content"] {
+    dialog {
         background-color: var(--background-secondary) !important;
-        border-color: #555 !important;
         color: var(--text-color) !important;
     }
 
-    /* Only inherit colors for structural elements */
     div::before, div::after,
     span::before, span::after,
     p::before, p::after,
@@ -97,5 +75,11 @@ Unfortunately, hot reload is broken with css imports.
     article::before, article::after,
     li::before, li::after {
         color: inherit !important;
+    }
+}
+
+@layer just-dark-code {
+    code, pre {
+        background-color: var(--background-secondary) !important;
     }
 }

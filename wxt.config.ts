@@ -1,5 +1,6 @@
 import { defineConfig } from "wxt";
 import customSelectors from "postcss-custom-selectors";
+import nested from "postcss-nested";
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
@@ -13,11 +14,11 @@ export default defineConfig({
     openDevtools: true,
     chromiumArgs: ["--user-data-dir=./.wxt/chrome-data"],
   },
-  vite: env => {
+  vite: () => {
     return {
       css: {
         postcss: {
-          plugins: [customSelectors],
+          plugins: [customSelectors, nested],
         },
       },
     };
