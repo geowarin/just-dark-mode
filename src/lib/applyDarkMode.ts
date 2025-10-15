@@ -1,16 +1,14 @@
 import darkMode from "./css/dark.pcss?inline";
 
-export function applyDarkMode() {
+export async function applyDarkMode() {
   // Check if already applied
   if (document.querySelector("#dark-mode-override")) {
     return;
   }
 
-  // language=css
-  const darkModeCSS = darkMode;
   const style = document.createElement("style");
   style.id = "dark-mode-override";
-  style.textContent = darkModeCSS;
+  style.textContent = darkMode;
   document.documentElement.appendChild(style);
 }
 
